@@ -17,19 +17,19 @@ class FA {
 		this.parseGrammar(arr);
 	};
 	
-	parseGrammar = grammar => {
+	parseGrammar = expresion => {
 		// fist el is always a state
-		const state = grammar[0];
+		const state = expresion[0];
 		const p = [];
-		for ( let i = 1; i <= grammar.length - 1; i++ ) {
-			if ( this.isTerminal(grammar[i]) ) {
-				// if is terminal ( no state [upper case letter] in grammar )
+		for ( let i = 1; i <= expresion.length - 1; i++ ) {
+			if ( this.isTerminal(expresion[i]) ) {
+				// if is terminal ( no state [upper case letter] in expresion )
 				// add epsilon as terminal char
-				const terminal = { [`${grammar[i]}`]: 'Eps' };
+				const terminal = { [`${expresion[i]}`]: 'Eps' };
 				p.push(terminal);
 			} else {
 				// non terminal char
-				const arr = grammar[i].split('');
+				const arr = expresion[i].split('');
 				for ( let j = 0; j <= arr.length - 1; j++ ) {
 					// if is upper char letter => is state
 					if ( this.isState(arr[j]) ) {

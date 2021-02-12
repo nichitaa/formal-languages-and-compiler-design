@@ -10,14 +10,14 @@ class FA {
 	// checks if a input character from reg-grammar is terminal char (no State inside reg-grammar)
 	isTerminal = state => state.toLowerCase() === state && state.toUpperCase() !== state;
 	
-	parseGrammarInput = ({ grammar }) => {
+	parseRegularExpressionInput = ({ grammar }) => {
 		// parse prompt input reg-grammar
 		// split by -> , | , space
 		const arr = grammar.split(/[ \->,\,|)]+/);
-		this.parseGrammar(arr);
+		this.parseExpression(arr);
 	};
 	
-	parseGrammar = expresion => {
+	parseExpression = expresion => {
 		// fist el is always a state
 		const state = expresion[0];
 		const p = [];

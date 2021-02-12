@@ -54,7 +54,7 @@ const grammarMenu = () => {
 	prompt.get(['grammar'], (err, input) => {
 		if ( err ) return console.log('Error: ', err);
 		if ( input ) {
-			fa.parseGrammarInput(input);
+			fa.parseRegularExpressionInput(input);
 			menu();
 		}
 	});

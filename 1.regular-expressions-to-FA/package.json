@@ -1,15 +1,21 @@
 {
-  "name": "Lab1PasecinicNichitaLFPC",
+  "name": "Lab1-LFPC-Pasecinic-Nichita",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node index"
+    "start": "ts-node index.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "prompt": "^1.1.0"
+    "prompt": "^1.1.0",
+    "ts-node": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.27",
+    "typescript": "^4.1.5"
   }
 }

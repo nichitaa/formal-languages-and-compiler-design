@@ -35,36 +35,36 @@
 *
 */
 
-const prompt = require('prompt');
-const FA = require('./fa');
+import prompt from 'prompt';
+import FA, {faI} from './fa'
 
 // Demo FA var16
-const demo = {
-	S: [{ b: 'S' }, { d: 'A' }],
-	A: [{ a: 'A' }, { d: 'B' }, { b: 'Eps' }],
-	B: [{ c: 'B' }, { a: 'Eps' }],
+const demo: faI = {
+	S: [{b: 'S'}, {d: 'A'}],
+	A: [{a: 'A'}, {d: 'B'}, {b: 'Eps'}],
+	B: [{c: 'B'}, {a: 'Eps'}],
 };
 
 // new instance of fa class
 // Note: !Pass an empty object to FA() to construct a new one from regular expressions in console menu
-const fa = new FA(demo);
+const fa: FA = new FA(demo);
 
-const grammarMenu = () => {
+const grammarMenu = (): void => {
 	console.log('Adding new regular grammar expresion to FA...');
-	prompt.get(['grammar'], (err, input) => {
-		if ( err ) return console.log('Error: ', err);
-		if ( input ) {
+	prompt.get(['grammar'], (err: object, input) => {
+		if (err) return console.log('Error: ', err);
+		if (input) {
 			fa.parseRegularExpressionInput(input);
 			menu();
 		}
 	});
 };
 
-const inputStringMenu = () => {
+const inputStringMenu = (): void => {
 	console.log('Input a string to check if it is accepted by current FA!');
-	prompt.get(['string'], (err, input) => {
-		if ( err ) return console.log('Error: ', err);
-		if ( input ) {
+	prompt.get(['string'], (err: object, input) => {
+		if (err) return console.log('Error: ', err);
+		if (input) {
 			console.log(`\nTraversing FA for: "${input.string}"`);
 			console.log(fa.parseInputStringForFA(input)); // returns bool
 			menu();
@@ -72,27 +72,36 @@ const inputStringMenu = () => {
 	});
 };
 
-const menu = () => {
+const displayFAMenu = (): void => {
+	console.clear();
+	console.log('Current FA:');
+	console.log(fa.fa);
+	menu();
+}
+
+const invalidAction = (): void => {
+	console.clear()
+	console.log('!!!Select a valid action!!!');
+	menu();
+}
+
+const menu = (): void => {
 	console.log('\n(1) → add reg-grammar');
 	console.log('(2) → display current FA');
 	console.log('(3) → check input string for FA');
 	console.log('(4) → exit');
-	prompt.get(['action'], (err, { action }) => {
-		if ( err ) console.log('Error: ', err);
-		else if ( action === '1' ) {
+	prompt.get(['action'], (err: object, {action}: { action: string }) => {
+		if (err) console.log('Error: ', err);
+		else if (action === '1') {
 			grammarMenu();
-		} else if ( action === '2' ) {
-			console.clear();
-			fa.displayFA();
-			menu();
-		} else if ( action === '3' ) {
+		} else if (action === '2') {
+			displayFAMenu();
+		} else if (action === '3') {
 			inputStringMenu();
-		} else if ( action === '4' ) {
+		} else if (action === '4') {
 			process.exit();
 		} else {
-			console.clear()
-			console.log('!!!Select a valid action!!!');
-			menu();
+			invalidAction();
 		}
 	});
 };

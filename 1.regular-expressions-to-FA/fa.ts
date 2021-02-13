@@ -1,121 +1,136 @@
-export interface pathI {
-	[key: string]: string
+interface INode {
+    [key: string]: string
 }
 
-export interface faI {
-	[key: string]: Array<pathI>
+export interface IFA {
+    [key: string]: Array<INode>
 }
+
+abstract class AFA {
+    _fa: IFA;
+
+    protected constructor(fa: IFA) {
+        this._fa = fa;
+    }
+
+    public abstract parseRegularExpressionInput(expression: string): void;
+
+    public abstract parseInputStringForFA(string: string): boolean;
+
+    protected abstract isState(state: string): boolean;
+
+    protected abstract isTerminal(state: string): boolean;
+
+    protected abstract parseExpression(expression: Array<string>): void;
+
+    protected abstract traverseFA(s: string[], nextPath: Array<INode>, isStartState?: boolean): boolean;
+}
+
 
 // aka Finite Automaton class
-export default class FA {
+export default class FA extends AFA {
 
-	private _fa: faI;
+    public constructor(fa: IFA) {
+        super(fa);
+    }
 
-	public constructor(fa: faI) {
-		this._fa = fa;
-	}
+    public get fa(): IFA {
+        return this._fa;
+    }
 
-	public get fa(): faI {
-		return this._fa;
-	}
+    public set fa(newFA: IFA) {
+        this._fa = newFA
+    }
 
-	public set fa(newFA: faI) {
-		this._fa = newFA
-	}
+    public parseRegularExpressionInput = (expression: string): void => {
+        if (expression.trim().length > 0) {
+            // split expression by -> , | , space
+            const arr: string[] = expression.split(/[ \->,\,|)]+/);
+            this.parseExpression(arr);
+        }
+    };
 
-	// checks if a input character from reg-grammar is State
-	private isState = (state: string): boolean => state.toUpperCase() === state && state.toLowerCase() !== state;
+    public parseInputStringForFA = (string: string): boolean => {
+        if (string.indexOf(' ') >= 0 || string === '') return false;
+        const arr: Array<string> = string.split('');
+        // return bool if valid string
+        // passing fa['S'], because first validation need to be made for start character node
+        return this.traverseFA(arr, this._fa['S'], true);
+    };
 
-	// checks if a input character from reg-grammar is terminal char (no State inside reg-grammar)
-	private isTerminal = (state: string): boolean => state.toLowerCase() === state && state.toUpperCase() !== state;
+    // checks if a input character from reg-grammar is State
+    protected isState = (state: string): boolean => state.toUpperCase() === state && state.toLowerCase() !== state;
 
-	public parseRegularExpressionInput = ({grammar}: { grammar: string }): void => {
-		// parse prompt input reg-grammar
-		// split by -> , | , space
-		const arr: string[] = grammar.split(/[ \->,\,|)]+/);
-		this.parseExpression(arr);
-	};
+    // checks if a input character from reg-grammar is terminal char (no State inside reg-grammar)
+    protected isTerminal = (state: string): boolean => state.toLowerCase() === state && state.toUpperCase() !== state;
 
-	private parseExpression = (expresion: string[]): void => {
-		// fist el is always a state
-		const state: string = expresion[0];
-		const p: Array<pathI> = [];
-		for (let i = 1; i <= expresion.length - 1; i++) {
-			if (this.isTerminal(expresion[i])) {
-				// if is terminal ( no state [upper case letter] in expresion )
-				// add epsilon as terminal char
-				const terminal: pathI = {[`${expresion[i]}`]: 'Eps'};
-				p.push(terminal);
-			} else {
-				// non terminal char
-				const arr = expresion[i].split('');
-				for (let j = 0; j <= arr.length - 1; j++) {
-					// if is upper char letter => is state
-					if (this.isState(arr[j])) {
-						// structure: { a: 'S' }
-						// { alphabet : next state corresponding to this alphabet }
-						const nextState: string = arr[j];
-						const alphabet: string = arr.slice(0, arr.indexOf(nextState)).join('');
-						const possible: pathI = {[`${alphabet}`]: nextState};
-						p.push(possible);
-					}
-				}
-			}
-		}
-		// update fa
-		if (this._fa[state] !== undefined) {
-			// if state already present
-			this._fa = {...this._fa, [`${state}`]: [...this._fa[state], ...p]};
-		} else {
-			// new state
-			this._fa = {...this._fa, [`${state}`]: [...p]};
-		}
-	};
+    protected parseExpression = (expresion: string[]): void => {
+        // fist el is always a state
+        const state: string = expresion[0];
+        const p: Array<INode> = [];
+        for (let i = 1; i <= expresion.length - 1; i++) {
+            if (this.isTerminal(expresion[i])) {
+                // if terminal
+                const terminal: INode = {[`${expresion[i]}`]: 'Eps'};
+                p.push(terminal);
+            } else {
+                // non terminal
+                const arr = expresion[i].split('');
+                for (let j = 0; j <= arr.length - 1; j++) {
+                    if (this.isState(arr[j])) {
+                        // if next state
+                        const nextState: string = arr[j];
+                        const alphabet: string = arr.slice(0, arr.indexOf(nextState)).join('');
+                        const possible: INode = {[`${alphabet}`]: nextState};
+                        p.push(possible);
+                    }
+                }
+            }
+        }
+        // update fa
+        if (this._fa[state] !== undefined) {
+            // if state already present
+            this._fa = {...this._fa, [`${state}`]: [...this._fa[state], ...p]};
+        } else {
+            // new state
+            this._fa = {...this._fa, [`${state}`]: [...p]};
+        }
+    };
 
-	public parseInputStringForFA = ({string}): boolean => {
-		// if input string has spaces
-		if (string.indexOf(' ') >= 0) return false;
-		// convert str to arr of chars
-		const arr: Array<string> = string.split('');
-		// return bool result
-		// passing fa['S'], because first validation need to be made for start character node
-		return this.traverseFA(arr, this._fa['S'], true);
-	};
+    // check if input [string] can be generated by traversing the FA
+    protected traverseFA = (s: string[], nextPath: Array<INode>, isStartState?: boolean): boolean => {
+        // if no further paths
+        if (nextPath === undefined) return false;
 
-	// check if input [string] can be generated by traversing the FA
-	private traverseFA = (s: string[], nextPath: Array<object>, isStartState?: boolean): boolean => {
-		// if no further paths
-		if (nextPath === undefined) return false;
+        if (s.length === 1) {
+            // if one char left => check for terminal
+            for (let j = 0; j <= nextPath.length - 1; j++) {
+                if (nextPath[j][s[0]] === 'Eps') {
+                    console.log('➤ Terminal');
+                    return true;
+                }
+            }
+            return false;
+        }
 
-		// if one char left => check if current state can be terminal
-		if (s.length === 1) {
-			for (let j = 0; j <= nextPath.length - 1; j++) {
-				if (nextPath[j][s[0]] === 'Eps') {
-					console.log('Terminal character');
-					return true;
-				}
-			}
-			return false;
-		}
+        // if length is 0 => all validations have passed
+        if (s.length === 0) return true;
 
-		// if length is 0 => all validations have passed
-		if (s.length === 0) return true;
+        // default case
+        for (let i = 0; i <= nextPath.length - 1; i++) {
+            // if the object with key of current char is present
+            // in array of possibilities for this node (state)
+            if (nextPath[i][s[0]] !== undefined) {
+                if (isStartState) console.log('➤ Start S'); // only for start state
+                console.log('➜', nextPath[i][s[0]]); // log next state
+                // traverse again without s[0] as it was already verified
+                // pass respective array for next iteration
+                return this.traverseFA(s.slice(1), this._fa[nextPath[i][s[0]]]);
+            }
+        }
 
-		// default case
-		for (let i = 0; i <= nextPath.length - 1; i++) {
-			// if the object with key of current char is present
-			// in array of possibilities for this node (state)
-			if (nextPath[i][s[0]] !== undefined) {
-				if (isStartState) console.log('Start State S');
-				console.log('Next State: ', nextPath[i][s[0]]);
-				// traverse again without current char as it was already verified
-				// pass array of possibilities for found char
-				return this.traverseFA(s.slice(1), this._fa[nextPath[i][s[0]]]);
-			}
-		}
-
-		// no matches
-		return false;
-	};
+        // no matches
+        return false;
+    };
 
 }

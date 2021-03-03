@@ -16,3 +16,7 @@ Pasecinic Nichita, FAF 192
 
   ​		`3. yarn start` 
 
+  ***Demo***
+
+  ![lab1demo](https://user-images.githubusercontent.com/57563506/107852445-643eb100-6e19-11eb-8a04-19b485ef071c.gif)
+

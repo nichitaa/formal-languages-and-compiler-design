@@ -1,3 +1,11 @@
+/*
+* LFPC Lab - 2
+* FAF - 192
+* Pasecinic Nichita
+*
+* V16 (see in NFA_test.ts)
+*/
+
 import {I_FA, nfa_start, nfa_terminal} from "./NFA_test";
 
 const _ = require('lodash')
@@ -28,11 +36,12 @@ class DFA extends A_DFA {
         this.convertNFAtoDFA()
     }
 
+    // just displaying the table with start symbol "->" and terminal symbol "*"
     public displayAsTable = (fa: I_FA, msg?: string) => {
         let table = {}
         const faCopy = _.cloneDeep(fa)
         for (let r in faCopy) {
-            if(this._start === r) {
+            if (this._start === r) {
                 table['->' + r] = faCopy[r]
             } else if (this._terminal === r) {
                 table['*' + r] = faCopy[r]
@@ -40,7 +49,7 @@ class DFA extends A_DFA {
                 table[r] = faCopy[r]
             }
         }
-        for(let r in table) {
+        for (let r in table) {
             const state = table[r]
             for (let c in state) {
                 if (state[c].length === 0) {
@@ -64,7 +73,9 @@ class DFA extends A_DFA {
     }
 
     public convertNFAtoDFA = (): void => {
+        // iterate in nfa rows
         for (let q_state in this._nfa) {
+            // if no such state in dfa -> add it
             if (this._dfa[q_state] === undefined) {
                 let q = ''
                 if (this._start === q_state) {
@@ -73,24 +84,32 @@ class DFA extends A_DFA {
                     q = '*' + q_state
                 }
                 this._dfa[q] = this._nfa[q_state]
+                // update dfa states
                 this._dfaStates.push([q_state])
+                // advance
                 this.advance(this._nfa[q_state])
             }
         }
     }
 
     private advance = (row: { [key: string]: string[] }): void => {
+        // iterate in row (already updated dfa table row)
         for (let r in row) {
+            // compute next possible state (q) and what forms it
             const available: string[] = row[r];
             const nextState: string = row[r].join('');
+            // if newly computed state is not in dfa
             if (this._dfa[nextState] === undefined && nextState !== '') {
                 let exists = false
+                // check what forms the newly created state if is not already in dfa
+                // just with other order (e.g: new state = q1q2q3 , present in dfa - q2q1q3 are similar state )
                 for (let i = 0; i < this._dfaStates.length; i++) {
-                    if (this.similarArrays(available, this._dfaStates[i])) {
+                    if (this.isDFAState(available, this._dfaStates[i])) {
                         exists = true
                     }
                 }
                 if (!exists) {
+                    // update dfa with new state
                     this.updateDFA(nextState, available);
                 }
             }
@@ -103,26 +122,34 @@ class DFA extends A_DFA {
             state = '*' + state;
         }
         newState[state] = {};
+        // update dfa states array
         this._dfaStates.push(arr);
+        // iterate in alphabet (a, b, c)
         for (let i = 0; i < this._a.length; i++) {
             let p: Array<string> = [];
-
+            // get every possible state for next one
             for (let j = 0; j < arr.length; j++) {
                 const old = this._nfa[arr[j]][this._a[i]];
                 if (old.length > 0) {
                     p = [...p, ...old];
                 }
             }
+            // make a set of the possibilities so they do not repeat
+            // just a union
             p = [...new Set([...p])];
+            // compute new state at alphabet of i
+            // e.g. q0 for a can go to [q0, q1] ...
             newState[state][this._a[i]] = [...p];
         }
+        // update dfa
         this._dfa = {...this._dfa, ...newState};
         for (let f in newState) {
+            // advance to next row
             this.advance(newState[f]);
         }
     }
 
-    private similarArrays = (newState: string[], dfaState: string[]): boolean => {
+    private isDFAState = (newState: string[], dfaState: string[]): boolean => {
         if (newState.length !== dfaState.length) return false;
         for (let j = 0; j < dfaState.length; j++) {
             if (newState.indexOf(dfaState[j]) === -1) {

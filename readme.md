@@ -94,7 +94,6 @@ Pasecinic Nichita, FAF 192
 
   ![lab2demo](https://user-images.githubusercontent.com/57563506/109866634-2a213c00-7c6e-11eb-8a62-0602aa1e97ac.gif)
 
-  To run it pleas follow Lab1 instructions!
 
 ------
 

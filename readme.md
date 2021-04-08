@@ -97,6 +97,31 @@ Pasecinic Nichita, FAF 192
 
 ------
 
+## Lab - 3 Convert CFG to CNF 
+
+- was used same structure (as in previous labs) to represent the grammar 
+- each step is a separate function which works independently and returns a new, updated grammar
+- utils - set of simple and useful utils to check if the grammar meets a certain condition (mostly)
+- ACTUAL PERFORMED STEPS:
+  1.  Check if S in RHA, if so update grammar with S0
+  2.  Remove null (ε) transitions and any remaining
+  3.  Remove unit transitions and any duplicates
+  4.  Substitute terminals in transitions with multiple variables to correspond to CNF 
+  5.  Substitute the transitions with more then 2 non terminals and non reachable or useless transitions to correspond to CNF
+- at each step is shown the current grammar in form of a table, then it is easy to follow the steps and check for correctitude (at least, I think so)
+
+![image](https://user-images.githubusercontent.com/82079634/114011385-d22db480-986d-11eb-8115-b79cf126f2b3.png)
+
+![image](https://user-images.githubusercontent.com/82079634/114011468-ed98bf80-986d-11eb-8e1b-8035f84d8669.png)
+
+![image-20210408132616846](C:\Users\Win10Pro\AppData\Roaming\Typora\typora-user-images\image-20210408132616846.png)
+
+![image](https://user-images.githubusercontent.com/82079634/114011561-07d29d80-986e-11eb-8b46-dbc74fa6aa86.png)
+
+![image](https://user-images.githubusercontent.com/82079634/114011600-13be5f80-986e-11eb-9ed5-557d7daf074f.png)
+
+![image-20210408132709784](C:\Users\Win10Pro\AppData\Roaming\Typora\typora-user-images\image-20210408132709784.png)
+
 
 
 `To run the programs:` 

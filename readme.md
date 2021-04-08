@@ -110,17 +110,17 @@ Pasecinic Nichita, FAF 192
   5.  Substitute the transitions with more then 2 non terminals and non reachable or useless transitions to correspond to CNF
 - at each step is shown the current grammar in form of a table, then it is easy to follow the steps and check for correctitude (at least, I think so)
 
-![image](https://user-images.githubusercontent.com/82079634/114011385-d22db480-986d-11eb-8115-b79cf126f2b3.png)
+![img](./3.CFG-to-CNF/img/0.png)
 
-![image](https://user-images.githubusercontent.com/82079634/114011468-ed98bf80-986d-11eb-8e1b-8035f84d8669.png)
+![img](./3.CFG-to-CNF/img/1.png)
 
-![image-20210408132616846](C:\Users\Win10Pro\AppData\Roaming\Typora\typora-user-images\image-20210408132616846.png)
+![img](./3.CFG-to-CNF/img/2.png)
 
-![image](https://user-images.githubusercontent.com/82079634/114011561-07d29d80-986e-11eb-8b46-dbc74fa6aa86.png)
+![img](./3.CFG-to-CNF/img/3.png)
 
-![image](https://user-images.githubusercontent.com/82079634/114011600-13be5f80-986e-11eb-9ed5-557d7daf074f.png)
+![img](./3.CFG-to-CNF/img/4.png)
 
-![image-20210408132709784](C:\Users\Win10Pro\AppData\Roaming\Typora\typora-user-images\image-20210408132709784.png)
+![img](./3.CFG-to-CNF/img/5.png)
 
 
 

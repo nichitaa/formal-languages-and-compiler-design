@@ -1,4 +1,4 @@
-import {CFG, EPSILON, S0} from '../consts/consts';
+import {CFG, EPSILON, S, S0} from '../consts/consts';
 import {hasEpsilon, structuredClone} from '../utils';
 
 const removeNullTransitions = (grammar: CFG): CFG => {
@@ -36,7 +36,7 @@ const updateNull = (grammar: CFG, nullState: string): CFG => {
 
                 if (splitedState.length === 1) {
                     // S -> A and A -> epsilon
-                    if (s === 'S') console.log(`There will be an ${S0} -> ${EPSILON}`);
+                    if (s === S) console.log(`\x1b[33m \n ${S} -> ${EPSILON} will not be included in next table! \x1b[0m`);
                     // A -> C and C -> epsilon, will add A -> epsilon
                     else cfg[s].push(EPSILON);
                 }
@@ -88,13 +88,13 @@ const makeCombinations = (s: Array<string>, nullState: string): Array<string> =>
         if (s[i] === nullState) idxs.push(i);
     }
 
-    for (let i = 0; i < idxs.length - 1; i++) {
+    for (let i = 0; i < idxs.length; i++) {
         const newS = s.filter((el, j) => j !== idxs[i]);
         res.push(newS.join(''));
     }
 
     const lastS = [...s];
-    for (let i = 0; i < idxs.length - 1; i++) {
+    for (let i = 0; i < idxs.length; i++) {
         delete lastS[idxs[i]];
     }
 

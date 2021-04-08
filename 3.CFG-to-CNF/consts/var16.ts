@@ -1,8 +1,8 @@
-import {CFG, EPSILON} from './consts';
+import {CFG, S, EPSILON} from './consts';
 
 export const cfg: CFG = {
-    'S': ['abAB'],
-    'A': ['aSab', 'BS', 'aA', 'b'],
+    [S]: ['abAB'],
+    'A': [`a${S}ab`, `B${S}`, 'aA', 'b'],
     'B': ['BA', 'ababB', 'b', EPSILON],
-    'C': ['AS'],
+    'C': [`A${S}`],
 };

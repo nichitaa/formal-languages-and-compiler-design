@@ -16,6 +16,7 @@ import {CFG, steps} from './consts/consts';
 // import {cfg} from './consts/var18';
 import {cfg} from './consts/var17';
 // import {cfg} from './consts/var16';
+// import {cfg} from './consts/sample'
 
 
 const log = (stepCFG: CFG, stepMsg: string): void => {

@@ -1,4 +1,4 @@
-import {CFG, S0} from '../consts/consts';
+import {CFG, S, S0} from '../consts/consts';
 import {structuredClone} from '../utils';
 
 // if S on RHS (right hand side) of CFG
@@ -11,9 +11,9 @@ const updateStartSymbol = (grammar: CFG): CFG => {
         for (let i = 0; i < arr.length; i++) {
 
             let splited = arr[i].split('');
-            if (splited.includes('S')) {
+            if (splited.includes(S)) {
                 let keyValues = Object.entries(cfg);
-                keyValues.splice(0, 0, [S0, ['S']]);
+                keyValues.splice(0, 0, [S0, [S]]);
                 cfg = Object.fromEntries(keyValues);
             }
 

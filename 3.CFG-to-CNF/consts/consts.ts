@@ -1,7 +1,7 @@
 // some constants
 export const EPSILON: string = 'ε';
-export const S0: string = '$₀';
-export const S: string = '$';
+export const S0: string = '$';
+export const S: string = 'S';
 
 export const steps: object = {
     0: `ORIGINAL CONTEXT FREE GRAMMAR`,

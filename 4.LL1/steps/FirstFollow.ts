@@ -4,7 +4,7 @@
  */
 
 
-import structuredClone, {getRHSDerivations, isNonTerminal, isTerminal} from "../utils/utils";
+import {structuredClone, getRHSDerivations, isNonTerminal, isTerminal, isRecursiveStack} from "../utils/utils";
 import {EPSILON, IFirstFollowTable, IProductions, STACK_END, START_SYMBOL} from "../consts";
 
 /**
@@ -22,16 +22,8 @@ export const buildFirstFollowTable = (productions: IProductions): IFirstFollowTa
 
     for (let el in prodsCopy) {
         firstFollowTable.first[el] = firstOf(el, prodsCopy);
-        firstFollowTable.follow[el] = followOf(el, prodsCopy);
+        firstFollowTable.follow[el] = followOf(el, prodsCopy, []);
     }
-
-    console.log("\n**FIRST**");
-    console.table(firstFollowTable.first);
-
-    console.log("\n**FOLLOW**");
-    console.table(firstFollowTable.follow);
-
-    // console.log(firstFollowTable);
 
     return firstFollowTable;
 
@@ -70,12 +62,22 @@ export const buildFirstFollowTable = (productions: IProductions): IFirstFollowTa
  *
  * @param state - state to compute the follow of
  * @param productions - all productions
+ * @param recursionStack - the recursion stack of the follow of states we compute for
  *
  * @returns res - set of the symbols computed for Follow(state)
  * */
-const followOf = (state: string, productions: IProductions): string[] => {
+const followOf = (state: string, productions: IProductions, recursionStack): string[] => {
 
     const prodsCopy = structuredClone(productions);
+
+    // to remove fucking recursion
+    // e.g.:
+    // A -> BP
+    // P -> cA
+    // keep track of recursion stack of the states that we compute followOf
+    const _recursionStack = [...recursionStack];
+    if(isRecursiveStack(_recursionStack, prodsCopy)) return [STACK_END]
+
     let res: string[] = [];
 
     if (state === START_SYMBOL) res.push(STACK_END);
@@ -93,11 +95,12 @@ const followOf = (state: string, productions: IProductions): string[] => {
                     res.push(...firstOfNonTerminal(slug, prodsCopy, 0, []));
                     if (res.includes(EPSILON)) {
                         res = res.filter(el => el !== EPSILON);
-                        res.push(...followOf(derivedFrom!, prodsCopy));
+                        _recursionStack.push(derivedFrom)
+                        res.push(...followOf(derivedFrom!, prodsCopy, _recursionStack));
                     }
                 } else {
-                    // it is the right most symbols from derivation and it is not deriving from itself
-                    if (derivedFrom !== state) res.push(...followOf(derivedFrom!, prodsCopy));
+                    _recursionStack.push(derivedFrom)
+                    if (derivedFrom !== state) res.push(...followOf(derivedFrom!, prodsCopy, _recursionStack));
                 }
 
             }
@@ -188,22 +191,23 @@ const firstOf = (state: string, productions: IProductions): string[] => {
 const firstOfNonTerminal = (state: string, productions: IProductions, currentPos: number, res: string[]): string[] => {
 
     let currentChar = state.charAt(currentPos);
+    let resArr = [...res]
 
     if (isNonTerminal(currentChar)) {
-        res.push(...firstOf(currentChar, productions));
+        resArr.push(...firstOf(currentChar, productions));
     }
 
     if (isTerminal(currentChar)) {
-        res.push(currentChar);
+        resArr.push(currentChar);
     }
 
-    if (res.includes(EPSILON)) {
-        if (currentPos === state.length - 1) return res;
-        res = res.filter(el => el !== EPSILON);
+    if (resArr.includes(EPSILON)) {
+        if (currentPos === state.length - 1) return [...new Set(resArr)];
+        resArr = resArr.filter(el => el !== EPSILON);
         currentPos++;
-        res.push(...firstOfNonTerminal(state, productions, currentPos, res));
+        resArr.push(...firstOfNonTerminal(state, productions, currentPos, resArr));
     }
 
-    return [...new Set(res)];
+    return [...new Set(resArr)];
 
 }

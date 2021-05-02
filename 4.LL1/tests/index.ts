@@ -10,6 +10,16 @@ export const var16: IProductions = {
     'D': ['a', 'aD']
 }
 
+export const var16NoLF: IProductions = {
+    [START_SYMBOL]: ['dA'],
+    A: ['BP'],
+    B: ['bD'],
+    D: ['aI'],
+    P: [EPSILON, 'cA'],
+    I: [EPSILON, 'D']
+}
+
+
 // down here are more relevant ones
 // from here: https://www.youtube.com/watch?v=_uSlP91jmTM
 export const prod: IProductions = {
@@ -58,3 +68,30 @@ export const prod4: IProductions = {
     'F': ['f', EPSILON],
 }
 
+
+export const recursion: IProductions = {
+    [START_SYMBOL]: ['ABC'],
+    'A': ['Aa', 'Ad', 'b'],
+    'B': ['Bb', 'c'],
+    'C': ['Cc', 'g']
+}
+
+// https://www.youtube.com/watch?v=3_VCoBfrt9c&ab_channel=Uncode-GATEComputerScience
+export const leftF: IProductions = {
+    [START_SYMBOL]: ['iEtS', 'iEtSeS', 'a'],
+    'E': ['b']
+}
+
+// https://www.youtube.com/watch?v=whe29gOb8p4&ab_channel=TheBootStrappers
+export const leftF1: IProductions = {
+    'A': ['aAB', 'aA'],
+    'B': ['bB', 'b']
+}
+
+// https://www.youtube.com/watch?v=23MdbHnhUSk&ab_channel=CSEconceptswithParinita
+// tricky one
+export const leftF2: IProductions = {
+    'S': ['aSSbS', 'aSaSb', 'abb', 'b'],
+    'B': ['bB', 'b'],
+    'C': ['cN', 'cNa', 'eM', 'eMa']
+}

@@ -10,7 +10,7 @@ export const isTerminal = (state: string): boolean => {
 }
 
 export const isNonTerminal = (state: string): boolean => {
-    return state.toUpperCase() === state;
+    return state.toUpperCase() === state && state !== '+' && state !== '*';
 }
 
 export const isEpsilon = (state: string): boolean => {
@@ -191,4 +191,51 @@ export const substituteMapping = (prods: IProductions, mappings: object): IProdu
 
 export const getKeyByValue = (object: object, value: string): string | undefined => {
     return Object.keys(object).find(key => object[key] === value);
+}
+
+export const hasLeftRecursion = (productions: IProductions): boolean => {
+    for (let derivedFrom in productions) {
+        for (let derivation of productions[derivedFrom]) {
+            if (derivedFrom.charAt(0) === derivation.charAt(0)) return true;
+        }
+    }
+    return false
+}
+
+export const getLeftRecursionData = (state: string, productions: IProductions): [boolean, string[]?, string[]?] => {
+    let derivations = productions[state];
+    let bool = false;
+    let res: string[] = [];
+
+    for (let derivation of derivations) {
+        if (derivation.charAt(0) === state.charAt(0)) {
+            bool = true;
+            res.push(derivation);
+        }
+    }
+
+    if (bool) {
+        // remaining
+        let rest = derivations.filter(el => !res.includes(el))
+        res = res.map(el => el.slice(1))
+        return [bool, res, rest]
+    }
+
+    return [bool, undefined, undefined]
+}
+
+export const getTerminalsAndNonTerminals = (productions: IProductions) => {
+    const t: string[] = [];
+    const n: string[] = [];
+    for (let derivedFrom in productions) {
+        if (!n.includes(derivedFrom)) n.push(derivedFrom)
+        for (let derivation of productions[derivedFrom]) {
+            const split = derivation.split('');
+            for (let s of split) {
+                if (isTerminal(s) && !t.includes(s)) t.push(s)
+                if (isNonTerminal(s) && !n.includes(s)) n.push(s)
+            }
+        }
+    }
+    return [t, n]
 }

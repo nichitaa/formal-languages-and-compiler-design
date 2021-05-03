@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.21",
+    "treeify": "^1.1.0",
     "ts-node": "^9.1.1"
   },
   "devDependencies": {

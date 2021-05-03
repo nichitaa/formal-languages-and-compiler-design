@@ -76,6 +76,19 @@ export const recursion: IProductions = {
     'C': ['Cc', 'g']
 }
 
+// https://www.youtube.com/watch?v=QoOALbef3ZM&ab_channel=AnitaR
+export const validLL1: IProductions = {
+    // Start symbol si E
+    // p is +
+    [START_SYMBOL]: [`${START_SYMBOL}+T`, 'T'],
+    // m is *
+    'T': ['T*F', 'F'],
+    // i is id
+    // o is (
+    // c is )
+    'F': [`o${START_SYMBOL}c`, 'i']
+}
+
 // https://www.youtube.com/watch?v=3_VCoBfrt9c&ab_channel=Uncode-GATEComputerScience
 export const leftF: IProductions = {
     [START_SYMBOL]: ['iEtS', 'iEtSeS', 'a'],
@@ -94,4 +107,11 @@ export const leftF2: IProductions = {
     'S': ['aSSbS', 'aSaSb', 'abb', 'b'],
     'B': ['bB', 'b'],
     'C': ['cN', 'cNa', 'eM', 'eMa']
+}
+
+// https://www.youtube.com/watch?v=atdLIZ5keXA&ab_channel=CSEconceptswithParinita
+export const nonValidll1: IProductions = {
+    [START_SYMBOL]: ['iEtSQ', 'a'],
+    'Q': ['eS', EPSILON],
+    'E': ['b']
 }

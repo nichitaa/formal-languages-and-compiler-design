@@ -66,7 +66,7 @@ export const buildFirstFollowTable = (productions: IProductions): IFirstFollowTa
  *
  * @returns res - set of the symbols computed for Follow(state)
  * */
-const followOf = (state: string, productions: IProductions, recursionStack): string[] => {
+export const followOf = (state: string, productions: IProductions, recursionStack): string[] => {
 
     const prodsCopy = structuredClone(productions);
 
@@ -142,7 +142,7 @@ const followOf = (state: string, productions: IProductions, recursionStack): str
  *
  * @returns res       - the distinct set of the firstOf symbols
  * */
-const firstOf = (state: string, productions: IProductions): string[] => {
+export const firstOf = (state: string, productions: IProductions): string[] => {
 
     const prodsCopy = structuredClone(productions);
     let res: string[] = [];
@@ -188,7 +188,7 @@ const firstOf = (state: string, productions: IProductions): string[] => {
  *
  * @returns res       - the set of resulted symbols
  * */
-const firstOfNonTerminal = (state: string, productions: IProductions, currentPos: number, res: string[]): string[] => {
+export const firstOfNonTerminal = (state: string, productions: IProductions, currentPos: number, res: string[]): string[] => {
 
     let currentChar = state.charAt(currentPos);
     let resArr = [...res]

@@ -3,7 +3,7 @@
  * @date 03.05.2021
  */
 
-
+import treeify from 'treeify';
 import {
     prod,
     prod1,
@@ -13,24 +13,28 @@ import {
     var16,
     recursion,
     leftF,
-    leftF1, leftF2, var16NoLF
+    leftF1, leftF2, var16NoLF, validLL1, nonValidll1
 } from './tests'
 import {buildFirstFollowTable} from "./steps/FirstFollow";
 import {leftFactoring} from "./steps/leftFactoring"
 import {substituteMapping} from "./utils/utils";
-import {IProductions} from "./consts";
+import {IFirstFollowTable, IProductions} from "./consts";
+import {eliminateLeftRecursion} from "./steps/leftRecursion";
+import {buildPredictiveParsingTable} from "./steps/predictiveParsingTable";
+import {parseLL1} from "./steps/parse";
 
 
 //#region ************************** FIRST - FOLLOW *************************************
 
-const testFirstFollow = (prods: IProductions, log: string): void => {
+const testFirstFollow = (prods: IProductions, log: string): IFirstFollowTable => {
     console.log(`\n${log}`)
     console.table(prods)
     const ff = buildFirstFollowTable(prods)
     console.log('First: ')
-    console.log(ff.first)
+    console.table(ff.first)
     console.log('Follow: ')
-    console.log(ff.follow)
+    console.table(ff.follow)
+    return ff
 }
 
 // First:
@@ -164,8 +168,46 @@ const testLF = (prods: IProductions, log: string): IProductions => {
 //#endregion
 
 
-const clean = testLF(var16, 'var16')
-console.log(clean)
-testFirstFollow(clean, 'var16')
+const testLR = (prod: IProductions, log: string) => {
+    console.log(log);
+    console.table(prod);
+    const [newProd, map] = eliminateLeftRecursion(prod, {});
+    console.table(newProd)
+    const ff = testFirstFollow(newProd, log)
+    buildPredictiveParsingTable(newProd)
+}
 
+
+
+const main = (prod: IProductions, log: string, word: string) => {
+    console.log('\n\x1b[36m%s\x1b[0m', 'ORIGINAL PRODUCTIONS:')
+    console.table(prod)
+
+    // 1. Left Recursion
+    const [lr, map] = eliminateLeftRecursion(prod, {});
+    // 2. Left Factoring
+    const [lf, map1] = leftFactoring(lr, map)
+    console.log('\n\x1b[36m%s\x1b[0m', 'ELIMINATED LR AND LF:')
+    console.table(lf)
+
+    // 3. Predictive table
+    const parseTable = buildPredictiveParsingTable(lf);
+    console.log('\n\x1b[36m%s\x1b[0m', 'PARSE TABLE:')
+    console.table(parseTable)
+
+    // 4. Actual word parsing + parse tree constructions
+    const [accepted, trace, parseTree] = parseLL1(word, parseTable);
+    if(accepted) {
+        console.log('\n\x1b[36m%s\x1b[0m', `PARSE TRACE OF THE WORD: ${word}`)
+        console.table(trace, ['stack', 'input', 'action', 'derivation'])
+
+        console.log('\n\x1b[36m%s\x1b[0m', `PARSE TREE OF THE WORD: ${word}`)
+        console.log(treeify.asTree(parseTree, true));
+    } else {
+        console.log('\n\x1b[36m%s\x1b[0m', `WORD: ${word} NOT ACCEPTED`)
+    }
+}
+
+main(var16, 'var16', 'dbaacbaaa')
+// main(validLL1, 'valid LL1', 'i*i+i')
 

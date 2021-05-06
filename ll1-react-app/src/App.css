@@ -1,0 +1,14 @@
+@import '~antd/dist/antd.css';
+
+body {
+    background-color: #f2f2f2;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4);
+}

@@ -7,3 +7,6 @@
 3.CFG-to-CNF/yarn.lock
 4.LL1/package-lock.json
 4.LL1/node_modules
+ll1-expressjs-api/dist
+ll1-expressjs-api/node_modules
+ll1-react-app/node_modules

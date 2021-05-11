@@ -5,7 +5,14 @@ import {useParser} from "../../../context/ParserContext";
 export const WordParseTable = () => {
     const {wordAccepted, wordParseTable} = useParser();
 
+    // console.log({wordParseTable})
+
     const col: object[] = [{
+        title: 'Idx',
+        dataIndex: 'idx',
+        key: 'idx',
+        render: (text) => <code>{text}</code>
+    },{
         title: 'Stack',
         dataIndex: 'stack',
         key: 'stack',
@@ -40,6 +47,7 @@ export const WordParseTable = () => {
         const el = wordParseTable[i];
         dat.push({
             key: i,
+            idx: i,
             stack: el.stack,
             input: el.input,
             action: el.action,

@@ -24,7 +24,7 @@ parserRouter.route('/parse')
             try {
                 [lr, mapLR] = eliminateLeftRecursion(productions, {});
                 // console.log(substituteMapping(lr, mapLR))
-                console.log("MAP LR: ", mapLR)
+                // console.log("MAP LR: ", mapLR)
             } catch (e) {
                 return res.json({
                     success: false,
@@ -37,7 +37,7 @@ parserRouter.route('/parse')
             let mapLF: object = {};
             try {
                 [lf, mapLF] = leftFactoring(lr, mapLR);
-                console.log("MAP LF: ", mapLF)
+                // console.log("MAP LF: ", mapLF)
                 // console.log(substituteMapping(lf, mapLF))
             } catch (e) {
                 return res.json({
@@ -53,8 +53,8 @@ parserRouter.route('/parse')
             let nonTerminals: string[] = [];
             try {
                 [parseTable, terminals, nonTerminals] = buildPredictiveParsingTable(lf);
-                console.table(parseTable)
-                console.log(parseTable)
+                // console.table(parseTable)
+                // console.log(parseTable)
             } catch (e) {
                 return res.json({
                     success: false,
@@ -85,7 +85,7 @@ parserRouter.route('/parse')
                 })
             }
 
-            res.json({
+            return res.json({
                 success: true,
                 message: 'All good',
                 leftRecursion: {data: lr, map: mapLR},

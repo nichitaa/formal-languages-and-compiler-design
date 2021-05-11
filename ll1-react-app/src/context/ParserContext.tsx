@@ -26,15 +26,21 @@ export interface ICtx {
     error: boolean,
     errorMsg: string,
     success: boolean,
+    loadVar16: Function,
+    parseTree: object
 }
 
 const ParserContext = React.createContext<ICtx>({
     productions: {},
-    addProduction: () => {},
-    clearProductions: () => {},
+    addProduction: () => {
+    },
+    clearProductions: () => {
+    },
     word: '',
-    updateWord: () => {},
-    parseWord: () => {},
+    updateWord: () => {
+    },
+    parseWord: () => {
+    },
     lrProds: {},
     lfProds: {},
     parseTable: [],
@@ -46,10 +52,14 @@ const ParserContext = React.createContext<ICtx>({
     lfMapping: {},
     startSymbol: '',
     epsilon: 'ε',
-    changeStartSymbol: () => {},
+    changeStartSymbol: () => {
+    },
     error: false,
     errorMsg: '',
     success: false,
+    loadVar16: () => {
+    },
+    parseTree: {}
 });
 
 
@@ -84,7 +94,7 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
     const changeStartSymbol = (symbol: string) => setStartSymbol(symbol.toUpperCase());
 
     const addProduction = (from: string, to: string): void => {
-        console.log({from, to})
+        // console.log({from, to})
         if (from.trim() === '' || to.trim() === '') return
         from = from.toUpperCase()
         if (productions[from] === undefined) {
@@ -131,10 +141,11 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({productions, word, startSymbol, epsilon})
         };
+        // console.log({body: params.body})
         fetch('http://localhost:8080/api/parse', params)
             .then(response => response.json())
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.success) {
                     setSuccess(true);
                     setError(false);
@@ -170,6 +181,19 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
             });
     }
 
+    const loadVar16 = () => {
+        setStartSymbol('S');
+        setEpsilon('ε');
+        const var16: IProds = {
+            'S': ['dA'],
+            'A': ['B', 'BcA'],
+            'B': ['bD'],
+            'D': ['a', 'aD']
+        }
+        setProductions(var16);
+        setWord('dbaacbaaa');
+    }
+
     const value: ICtx = {
         productions,
         addProduction,
@@ -191,7 +215,9 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
         changeStartSymbol,
         error,
         errorMsg,
-        success
+        success,
+        loadVar16,
+        parseTree
     };
 
     return (

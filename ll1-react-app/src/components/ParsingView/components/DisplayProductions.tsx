@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Typography, Divider} from 'antd';
+import ReactJson from "react-json-view";
 
 const {Title, Paragraph, Text, Link} = Typography;
 
@@ -17,27 +18,29 @@ const DisplayProductions = ({prods, mappings}) => {
                 <Paragraph>
                     <blockquote>
                         {Object.keys(prods).map((key, i) => {
-                            return <>
+                            return <Fragment key={key}>
                                 <strong>{key} 🡪 </strong>
-                                {
-                                    prods[key].map((el, idx) => {
-                                        if(idx === 0) return <> {el} </>
-                                        else return <>
-                                            | {el}
-                                        </>
-                                    })
-                                }
+                                {prods[key].map((el, idx) => {
+                                    if (idx === 0) return <> {el} </>
+                                    else return <>
+                                        | {el}
+                                    </>
+                                })}
                                 <br/>
-                            </>
+                            </Fragment>
                         })}
                     </blockquote>
                 </Paragraph>
             </code>
             <pre>
-                Mappings:
-                <code>
-                    {JSON.stringify(mappings, null, 2)}
-                </code>
+                <ReactJson
+                    collapsed={true}
+                    name={'mappings'}
+                    src={mappings}
+                    theme={'solarized'}
+                    displayDataTypes={false}
+                    displayObjectSize={false}
+                />
             </pre>
         </div>
     );

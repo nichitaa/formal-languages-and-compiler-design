@@ -16,7 +16,7 @@ const DisplayProductions = () => {
     };
 
     useEffect(() => {
-        console.log({effect: {error, errorMsg, success}})
+        // console.log({effect: {error, errorMsg, success}})
         if(success && !error) {
             openNotificationWithIcon('success', 'All Good!')
         } else if (error && !success) {
@@ -29,7 +29,6 @@ const DisplayProductions = () => {
             width: '100%',
             height: '30em',
             overflowY: 'auto',
-            marginTop: '2em',
             marginBottom: '2em',
             paddingLeft: '1em',
             paddingRight: '1em'
@@ -40,6 +39,7 @@ const DisplayProductions = () => {
                 Epsilon Symbol: {epsilon}
             </code>
             <ReactJson
+                name={'productions'}
                 src={productions}
                 theme={'solarized'}
                 displayDataTypes={false}

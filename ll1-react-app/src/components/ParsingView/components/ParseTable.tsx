@@ -5,7 +5,7 @@ import {useParser} from "../../../context/ParserContext";
 
 
 export const ParseTable = () => {
-    const {parseTable, terminals, nonTerminals} = useParser();
+    const {parseTable, terminals} = useParser();
 
     const col: object[] = [{
         title: 'State',
@@ -14,7 +14,6 @@ export const ParseTable = () => {
         render: text => <code>{text}</code>
     }]
     const dat: object[] = []
-    // console.log({parseTable, terminals})
 
     for (let el of terminals) {
         if(el !== 'ε') {

@@ -131,3 +131,58 @@ Pasecinic Nichita, FAF 192
 3. `run npm install or yarn install`
 4. `run npm start or yarn start`
 
+---------
+
+## **Lab - 4 LL1 Parser**
+
+- the console app is in [4.LL1](https://github.com/nikitaal/LFPC-Labs/tree/master/4.LL1)
+
+  `To run it:` 
+
+  1. `clone repository`
+
+  2. `cd 4LL1 folder`
+
+  3. `run npm i`
+
+  4. `run npm start`
+
+  5. `you can change the productions to be parsed by changing the arguments of main function in index.ts`
+
+  6. `find and modify the test cases from tests/index.ts directory`
+
+  7. `Parse tree works fine too, though is not that easy to follow as on web version of the application`
+
+     **Here is a quick demo**
+
+     ![img](./4.LL1/demo-gif/console.gif)
+
+- the web application with reach UI to visualize the ll1 steps is in [ll1-react-app](https://github.com/nikitaal/LFPC-Labs/tree/master/ll1-react-app) and the same logic from  [4.LL1](https://github.com/nikitaal/LFPC-Labs/tree/master/4.LL1) was used for express api from [ll1-expressjs-api](https://github.com/nikitaal/LFPC-Labs/tree/master/ll1-expressjs-api)
+
+  `To run the aplication:` 
+
+  1. `clone repository`
+
+  2. `cd into ll1-expressjs-api folder`
+
+  3. `run npm i`
+
+  4. `run npm run dev`
+
+  5. `cd into ll1-react-app`
+
+  6. `run npm i`
+
+  7. `run npm run start`
+
+  8. `will be opened default http://localhost:3000/`
+
+  9. `Now you can load predifined productions and parse any word or add your own productions and try to parse it`
+
+  10. `Parse tree works fine too`
+
+      **Here is a quick demo**
+
+      ![img](./4.LL1/demo-gif/demo.gif)
+
+  Note: most of the edge-cases were covered for each step, but there can still appear some recursion errors for ambiguous productions. 

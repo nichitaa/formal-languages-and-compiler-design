@@ -156,8 +156,7 @@ const longestStartingSubstring = (array: string[]) => {
 }
 
 export const getNewRandLetter = (prods: IProductions): string => {
-    // todo: mb there is a better way
-    const alphabet = 'PLOIH';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let rand = '';
     do {
         rand = alphabet[Math.floor(Math.random() * alphabet.length)];

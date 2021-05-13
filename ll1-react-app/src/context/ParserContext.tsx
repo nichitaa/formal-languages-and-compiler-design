@@ -27,7 +27,13 @@ export interface ICtx {
     errorMsg: string,
     success: boolean,
     loadVar16: Function,
-    parseTree: object
+    loadVar15: Function,
+    parseTree: object,
+    substitutedProds: IProds,
+    loadTest1: Function,
+    loadTest2: Function,
+    loadTest3: Function,
+    loadTest4: Function,
 }
 
 const ParserContext = React.createContext<ICtx>({
@@ -59,7 +65,13 @@ const ParserContext = React.createContext<ICtx>({
     success: false,
     loadVar16: () => {
     },
-    parseTree: {}
+    loadVar15: () => {},
+    parseTree: {},
+    substitutedProds: {},
+    loadTest1: () => {},
+    loadTest2: () => {},
+    loadTest3: () => {},
+    loadTest4: () => {}
 });
 
 
@@ -68,16 +80,18 @@ export const useParser = () => {
 }
 
 export const ParserProvider = ({children}: { children: React.ReactNode }) => {
-    const [productions, setProductions] = useState<{ [name: string]: string[] }>({});
+    const [productions, setProductions] = useState<IProds>({});
     const [startSymbol, setStartSymbol] = useState<string>('');
     const [epsilon, setEpsilon] = useState<string>('ε')
     const [word, setWord] = useState<string>('');
 
-    const [leftRecursionProds, setLeftRecursionProds] = useState<{ [name: string]: string[] }>({});
-    const [leftRecursionMaps, setLeftRecursionMaps] = useState<{ [name: string]: string }>({});
+    const [leftRecursionProds, setLeftRecursionProds] = useState<IProds>({});
+    const [leftRecursionMaps, setLeftRecursionMaps] = useState<IProds>({});
 
-    const [leftFactoringProds, setLeftFactoringProds] = useState<{ [name: string]: string[] }>({});
-    const [leftFactoringMaps, setLeftFactoringMaps] = useState<{ [name: string]: string }>({})
+    const [leftFactoringProds, setLeftFactoringProds] = useState<IProds>({});
+    const [leftFactoringMaps, setLeftFactoringMaps] = useState<IProds>({});
+
+    const [substitutedProds, setSubstitutedProds] = useState<IProds>({})
 
     const [parseTable, setParseTable] = useState<object>({});
     const [terminals, setTerminals] = useState<string[]>([]);
@@ -129,6 +143,7 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
         setErrorMsg('');
         setError(false);
         setSuccess(false);
+        setSubstitutedProds({});
     }
 
     const updateWord = (w) => {
@@ -141,11 +156,11 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({productions, word, startSymbol, epsilon})
         };
-        // console.log({body: params.body})
+        console.log({body: {productions, word, startSymbol, epsilon}})
         fetch('http://localhost:8080/api/parse', params)
             .then(response => response.json())
             .then(res => {
-                // console.log(res)
+                console.log(res)
                 if (res.success) {
                     setSuccess(true);
                     setError(false);
@@ -163,13 +178,16 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
                         setNonTerminals(res.nonTerminals);
                         setTerminals(res.terminals);
                     }
+                    if (res.substitutedProds) {
+                        setSubstitutedProds(res.substitutedProds)
+                    }
                     if (res.wordAccepted) {
                         setWordAccepted(res.wordAccepted);
                         setWordParseTable(res.wordParseTable);
                         setParseTree(res.parseTree)
                     } else {
                         setWordAccepted(res.wordAccepted);
-                        setWordParseTable([]);
+                        setWordParseTable(res.wordParseTable);
                         setParseTree({})
                     }
                 } else {
@@ -192,6 +210,83 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
         }
         setProductions(var16);
         setWord('dbaacbaaa');
+    }
+
+    const loadVar15 = () => {
+        setStartSymbol('S');
+        setEpsilon('ε');
+        const var15: IProds = {
+            'S': ['Ag'],
+            'A': ['abcB'],
+            'B': ['Cd'],
+            'C': ['e', 'CfD'],
+            'D': ['e']
+        }
+        setProductions(var15);
+        setWord('abcefedg');
+    }
+
+    const loadTest1 = () => {
+        setStartSymbol('S');
+        setEpsilon('ε');
+        const prod: IProds = {
+            'S': ['ABCDE'],
+            'A': ['a', 'ε'],
+            'B': ['b', 'ε'],
+            'C': ['c'],
+            'D': ['d', 'ε'],
+            'E': ['e', 'ε']
+        };
+        setProductions(prod);
+        setWord('abcde');
+    }
+
+    const loadTest2 = () => {
+        setStartSymbol('S');
+        setEpsilon('ε');
+        const prod: IProds = {
+            'S': ['aBDh'],
+            'B': ['cC'],
+            'C': ['bC', 'ε'],
+            'D': ['EF'],
+            'E': ['g', 'ε'],
+            'F': ['f', 'ε'],
+        }
+        setProductions(prod);
+        setWord('acbbbbbgh');
+    }
+
+    const loadTest3 = () => {
+        setStartSymbol('E');
+        setEpsilon('ε');
+        const prod: IProds = {
+            // Start symbol si E
+            // p is +
+            'E': [`E+T`, 'T'],
+            // m is *
+            'T': ['T*F', 'F'],
+            // i is id
+            // o is (
+            // c is )
+            'F': [`oEc`, 'i']
+        }
+        setProductions(prod);
+        setWord('i*i+i');
+    }
+
+    const loadTest4 = () => {
+        setStartSymbol('S');
+        setEpsilon('ε');
+        const prod: IProds = {
+            'S': ['E'],
+            'E': ['FcA'],
+            'A': ['b', 'dD'],
+            'D': ['Fe'],
+            'F': ['aX'],
+            'X': ['ε', 'baX']
+        }
+        setProductions(prod);
+        setWord('ababacdabae');
     }
 
     const value: ICtx = {
@@ -217,7 +312,13 @@ export const ParserProvider = ({children}: { children: React.ReactNode }) => {
         errorMsg,
         success,
         loadVar16,
-        parseTree
+        loadVar15,
+        parseTree,
+        substitutedProds,
+        loadTest1,
+        loadTest2,
+        loadTest3,
+        loadTest4
     };
 
     return (

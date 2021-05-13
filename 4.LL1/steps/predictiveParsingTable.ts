@@ -34,6 +34,7 @@ export const buildPredictiveParsingTable = (productions: IProductions): object =
                 if (first !== EPSILON) {
                     if (table[derivedFrom][first] === undefined) table[derivedFrom][first] = derivation
                     else {
+                        console.table(table)
                         throw new Error(`This is not a valid LL1 grammar,
                         as cell under row ${derivedFrom} and coll ${first} will contain more then one production:
                         ${table[derivedFrom][first]} and ${derivation}`)

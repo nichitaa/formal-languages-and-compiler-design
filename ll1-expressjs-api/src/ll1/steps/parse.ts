@@ -64,7 +64,7 @@ export const parseLL1 = (word: string, table: object): [boolean, { stack, input,
         if (isNonTerminal(top!)) {
             if (table[top!][input[0]] === undefined) {
                 console.log(`String: ${word} can not be parsed as for Non Terminal ${top} does not exists a derivation with ${input[0]}`)
-                return [false, undefined];
+                return [false, res, parseTree];
             }
             const toPush = table[top!][input[0]].split('').reverse()
             if (!toPush.includes(EPSILON)) stack.push(...toPush)

@@ -3,9 +3,7 @@ import {Table, Tag} from 'antd';
 import {useParser} from "../../../context/ParserContext";
 
 export const WordParseTable = () => {
-    const {wordAccepted, wordParseTable} = useParser();
-
-    // console.log({wordParseTable})
+    const {wordParseTable} = useParser();
 
     const col: object[] = [{
         title: 'Idx',
@@ -29,6 +27,7 @@ export const WordParseTable = () => {
         render: (text) => {
             if (text === 'terminal/consumed') return <Tag color={'blue'}>{text}</Tag>
             else if (text === '--- accepted --') return <Tag color={'green'}>{text}</Tag>
+            else if (text === '') return <Tag color={'red'}>no corresponding action</Tag>
             else return <code>{text}</code>
         }
     }, {
@@ -37,6 +36,7 @@ export const WordParseTable = () => {
         key: 'derivation',
         render: (text) => {
             if (text === '--- accepted --') return <Tag color={'green'}>{text}</Tag>
+            else if (text === '') return <Tag color={'red'}>no corresponding derivation</Tag>
             else return <code>{text}</code>
         }
     }]
@@ -60,11 +60,7 @@ export const WordParseTable = () => {
             marginLeft: '1em',
             marginRight: '1em'
         }}>
-            {
-                wordAccepted ?
-                    <Tag color="green">word accepted</Tag>
-                    : <Tag color="red">word not accepted</Tag>
-            }
+
 
             <Table
                 columns={col}

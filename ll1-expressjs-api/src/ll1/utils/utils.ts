@@ -156,8 +156,7 @@ const longestStartingSubstring = (array: string[]) => {
 }
 
 export const getNewRandLetter = (prods: IProductions): string => {
-    // todo: mb there is a better way
-    const alphabet = 'PLOIH';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let rand = '';
     do {
         rand = alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -196,7 +195,7 @@ export const getKeyByValue = (object: object, value: string): string | undefined
 export const hasLeftRecursion = (productions: IProductions): boolean => {
     for (const derivedFrom in productions) {
         for (const derivation of productions[derivedFrom]) {
-            if (derivedFrom.charAt(0) === derivation.charAt(0)) return true;
+            if (derivedFrom.charAt(0) === derivation.charAt(0) && derivation.split('').length > 1) return true;
         }
     }
     return false

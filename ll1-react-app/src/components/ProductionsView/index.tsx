@@ -1,10 +1,10 @@
 import React from 'react';
-import {Typography, Divider, Row} from 'antd';
+import {Typography} from 'antd';
 import ProductionsInput from "./components/ProductionsInput";
 import DisplayProductions from "./components/DisplayProductions";
 import ParseWordInput from "./components/ParseWordInput";
 
-const {Title, Paragraph, Text, Link} = Typography;
+const {Title} = Typography;
 
 const ProductionsView = () => {
     return (
@@ -17,6 +17,8 @@ const ProductionsView = () => {
             <ProductionsInput/>
             <ParseWordInput/>
             <DisplayProductions/>
+            <Title style={{textAlign: 'center'}} level={4}> <code style={{fontSize: '0.7em'}}>author: Pasecinic Nichita <br/> faf
+                192 <br/> 05.05.2021</code> </Title>
         </div>
     );
 };

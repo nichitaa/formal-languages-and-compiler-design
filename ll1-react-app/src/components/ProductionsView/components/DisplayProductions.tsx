@@ -4,7 +4,6 @@ import {useParser} from "../../../context/ParserContext";
 import {notification} from "antd";
 
 
-
 const DisplayProductions = () => {
     const {productions, startSymbol, epsilon, error, errorMsg, success} = useParser();
 
@@ -16,22 +15,22 @@ const DisplayProductions = () => {
     };
 
     useEffect(() => {
-        // console.log({effect: {error, errorMsg, success}})
         if(success && !error) {
             openNotificationWithIcon('success', 'All Good!')
         } else if (error && !success) {
             openNotificationWithIcon('error', `Parsing Error!: ${errorMsg}`)
         }
-    }, [error, success])
+    }, [error, success, errorMsg])
 
     return (
         <div style={{
             width: '100%',
-            height: '30em',
+            height: '55vh',
             overflowY: 'auto',
-            marginBottom: '2em',
+            marginTop: '1em',
+            marginBottom: '1em',
             paddingLeft: '1em',
-            paddingRight: '1em'
+            paddingRight: '1em',
         }}>
             <code>
                 Start Symbol: {startSymbol}
@@ -39,11 +38,13 @@ const DisplayProductions = () => {
                 Epsilon Symbol: {epsilon}
             </code>
             <ReactJson
+                enableClipboard={true}
                 name={'productions'}
                 src={productions}
-                theme={'solarized'}
+                theme={'bright:inverted'}
                 displayDataTypes={false}
                 displayObjectSize={false}
+                indentWidth={4}
             />
         </div>
     );

@@ -5,6 +5,7 @@ import {eliminateLeftRecursion} from "../ll1/steps/leftRecursion";
 import {leftFactoring} from "../ll1/steps/leftFactoring";
 import {buildPredictiveParsingTable} from "../ll1/steps/predictiveParsingTable";
 import {parseLL1} from "../ll1/steps/parse";
+import {substituteMapping} from "../ll1/utils/utils";
 
 const parserRouter = express.Router();
 
@@ -12,19 +13,19 @@ parserRouter.use(bodyParser.json());
 
 parserRouter.route('/parse')
     .post((req, res, next) => {
-        // console.log(req.body)
+        console.log(req.body)
         try {
             const {word, productions} = req.body;
 
             changeSymbols(req.body.startSymbol, req.body.epsilon);
+            // console.log('changed symbols')
 
             // 1. Left Recursion
             let lr: IProductions = {};
             let mapLR: object = {};
             try {
                 [lr, mapLR] = eliminateLeftRecursion(productions, {});
-                // console.log(substituteMapping(lr, mapLR))
-                // console.log("MAP LR: ", mapLR)
+                // console.log('1. left recursion: ', lr, mapLR)
             } catch (e) {
                 return res.json({
                     success: false,
@@ -37,8 +38,7 @@ parserRouter.route('/parse')
             let mapLF: object = {};
             try {
                 [lf, mapLF] = leftFactoring(lr, mapLR);
-                // console.log("MAP LF: ", mapLF)
-                // console.log(substituteMapping(lf, mapLF))
+                // console.log('2. left factoring: ', lf, mapLF)
             } catch (e) {
                 return res.json({
                     success: false,
@@ -53,8 +53,7 @@ parserRouter.route('/parse')
             let nonTerminals: string[] = [];
             try {
                 [parseTable, terminals, nonTerminals] = buildPredictiveParsingTable(lf);
-                // console.table(parseTable)
-                // console.log(parseTable)
+                // console.log('3. predictive table: ', parseTable, terminals, nonTerminals)
             } catch (e) {
                 return res.json({
                     success: false,
@@ -70,10 +69,31 @@ parserRouter.route('/parse')
             let parseTree: object = {};
             try {
                 [accepted, trace, parseTree] = parseLL1(word, parseTable);
+                // console.log('4. word parsing: ', accepted, trace, parseTree)
             } catch (e) {
                 return res.json({
                     success: false,
                     message: `Error while parsing the word: ${word}: ${e.message}`,
+                    leftRecursion: {data: lf, map: mapLR},
+                    leftFactoring: {data: lf, map: mapLF},
+                    parseTable,
+                    terminals,
+                    nonTerminals,
+                    wordAccepted: accepted,
+                    wordParseTable: trace,
+                    parseTree
+                })
+            }
+
+            // 5. Substitute Mapping
+            let substitutedProds: IProductions;
+            try {
+                substitutedProds = substituteMapping(lf, mapLF);
+                // console.log('5. substituted productions', substitutedProds)
+            } catch (e) {
+                return res.json({
+                    success: false,
+                    message: `Error while substitute mappings for productions after Left Factoring`,
                     leftRecursion: {data: lf, map: mapLR},
                     leftFactoring: {data: lf, map: mapLF},
                     parseTable,
@@ -95,7 +115,8 @@ parserRouter.route('/parse')
                 nonTerminals,
                 wordAccepted: accepted,
                 wordParseTable: trace,
-                parseTree
+                parseTree,
+                substitutedProds
             })
 
         } catch (e) {

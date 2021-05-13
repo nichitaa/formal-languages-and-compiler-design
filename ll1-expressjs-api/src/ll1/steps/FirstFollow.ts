@@ -190,6 +190,7 @@ export const firstOf = (state: string, productions: IProductions): string[] => {
  * */
 export const firstOfNonTerminal = (state: string, productions: IProductions, currentPos: number, res: string[]): string[] => {
 
+    // console.log({firstOfNonTerminal: state, productions, currentPos, res})
     const currentChar = state.charAt(currentPos);
     let resArr = [...res]
 

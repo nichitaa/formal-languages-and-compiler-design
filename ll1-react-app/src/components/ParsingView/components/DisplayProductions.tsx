@@ -1,8 +1,8 @@
-import React, {Fragment} from 'react';
-import {Typography, Divider} from 'antd';
+import React from 'react';
+import {Typography} from 'antd';
 import ReactJson from "react-json-view";
 
-const {Title, Paragraph, Text, Link} = Typography;
+const {Paragraph} = Typography;
 
 const DisplayProductions = ({prods, mappings}) => {
 
@@ -18,30 +18,28 @@ const DisplayProductions = ({prods, mappings}) => {
                 <Paragraph>
                     <blockquote>
                         {Object.keys(prods).map((key, i) => {
-                            return <Fragment key={key}>
+                            return <React.Fragment key={key}>
                                 <strong>{key} 🡪 </strong>
                                 {prods[key].map((el, idx) => {
-                                    if (idx === 0) return <> {el} </>
-                                    else return <>
+                                    if (idx === 0) return <React.Fragment key={el}> {el} </React.Fragment>
+                                    else return <React.Fragment key={el}>
                                         | {el}
-                                    </>
+                                    </React.Fragment>
                                 })}
                                 <br/>
-                            </Fragment>
+                            </React.Fragment>
                         })}
                     </blockquote>
                 </Paragraph>
             </code>
-            <pre>
-                <ReactJson
-                    collapsed={true}
-                    name={'mappings'}
-                    src={mappings}
-                    theme={'solarized'}
-                    displayDataTypes={false}
-                    displayObjectSize={false}
-                />
-            </pre>
+            {(Object.keys(mappings).length > 0)
+            && <ReactJson
+                collapsed={true}
+                name={'mappings'}
+                src={mappings}
+                theme={'bright:inverted'}
+                displayDataTypes={false}
+                displayObjectSize={false}/>}
         </div>
     );
 };

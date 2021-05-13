@@ -1,11 +1,11 @@
 .node__root > circle {
-    fill: rgba(0, 0, 0, 0.8);
+    fill: #9e2a2b;
 }
 
 .node__branch > circle {
-    fill: rgba(0, 0, 0, 0.4);
+    fill: #9a8c98;
 }
 
 .node__leaf > circle {
-    fill: green;
+    fill: #fefae0;
 }

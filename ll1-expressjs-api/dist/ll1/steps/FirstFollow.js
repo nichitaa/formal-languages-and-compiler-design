@@ -169,6 +169,7 @@ exports.firstOf = firstOf;
  * @returns res       - the set of resulted symbols
  * */
 const firstOfNonTerminal = (state, productions, currentPos, res) => {
+    // console.log({firstOfNonTerminal: state, productions, currentPos, res})
     const currentChar = state.charAt(currentPos);
     let resArr = [...res];
     if (utils_1.isNonTerminal(currentChar)) {

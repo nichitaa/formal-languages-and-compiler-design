@@ -159,8 +159,7 @@ const longestStartingSubstring = (array) => {
     return a1.substring(0, i);
 };
 const getNewRandLetter = (prods) => {
-    // todo: mb there is a better way
-    const alphabet = 'PLOIH';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let rand = '';
     do {
         rand = alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -199,7 +198,7 @@ exports.getKeyByValue = getKeyByValue;
 const hasLeftRecursion = (productions) => {
     for (const derivedFrom in productions) {
         for (const derivation of productions[derivedFrom]) {
-            if (derivedFrom.charAt(0) === derivation.charAt(0))
+            if (derivedFrom.charAt(0) === derivation.charAt(0) && derivation.split('').length > 1)
                 return true;
         }
     }

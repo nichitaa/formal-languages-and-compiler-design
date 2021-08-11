@@ -6,6 +6,7 @@ export interface IFA {
     [key: string]: Array<INode>
 }
 
+
 abstract class AFA {
     _fa: IFA;
 

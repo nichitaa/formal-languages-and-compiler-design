@@ -1,8 +1,6 @@
-# LFPC Labs
+# Formal languages and Compiler design 
 
-Pasecinic Nichita, FAF 192
-
-## **Lab - 1**
+Pasecinic Nichita
 
 - NodeJS-TypeScript CLI to convert a regular grammar to Finite Automaton (FA)
 
@@ -12,7 +10,7 @@ Pasecinic Nichita, FAF 192
 
   ![lab1demo](https://user-images.githubusercontent.com/57563506/107852445-643eb100-6e19-11eb-8a04-19b485ef071c.gif)
 
-## Lab - 2 Convert NFA to DFA
+## Convert NFA to DFA
 
 - Program to convert input NFA to DFA, respecting all transitions and rules.
 
@@ -75,21 +73,6 @@ Pasecinic Nichita, FAF 192
 
   *More NFA examples can be seen in NFA_test.ts* 
 
-  
-
-  ##### Stuff requested to be written on paper:  
-
-  > 1. Convert NFA from your variant to DFA on paper, writing all transitions and drawing converted automato.
-
-  ![photo_2021-03-03_22-23-12](https://user-images.githubusercontent.com/57563506/109867479-32c64200-7c6f-11eb-933e-57d9d52fb528.jpg)
-
-  ##### JFLAP says it is correct !
-
-  ![Untitled picture](https://user-images.githubusercontent.com/57563506/109867656-728d2980-7c6f-11eb-8a05-64e0b2556a26.png)
-
-  > 1. Write program which converts nondeterministic finite automato (NFA) to deterministic finite automato (DFA)
-  > 2. Display converted automato in form of graph or transition table
-
   ##### The program results are shown in form on the transition table
 
   ![lab2demo](https://user-images.githubusercontent.com/57563506/109866634-2a213c00-7c6e-11eb-8a62-0602aa1e97ac.gif)
@@ -97,7 +80,7 @@ Pasecinic Nichita, FAF 192
 
 ------
 
-## Lab - 3 Convert CFG to CNF 
+## Convert CFG to CNF 
 
 - was used same structure (as in previous labs) to represent the grammar 
 - each step is a separate function which works independently and returns a new, updated grammar
@@ -133,7 +116,7 @@ Pasecinic Nichita, FAF 192
 
 ---------
 
-## **Lab - 4 LL1 Parser**
+## **LL1 Parser**
 
 - the console app is in [4.LL1](https://github.com/nikitaal/LFPC-Labs/tree/master/4.LL1)
 
